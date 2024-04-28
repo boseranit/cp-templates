@@ -45,11 +45,15 @@ vi intToVec(ll n) {
 ll cdiv(ll a, ll b) { return a/b+((a^b)>0&&a%b); } // divide a by b rounded up
 ll fdiv(ll a, ll b) { return a/b-((a^b)<0&&a%b); } // divide a by b rounded down
 
-int mod = 1e9+7;
-int power(int base, ll exp) {
-    if (exp == 0) return 1;
-    ll res = (ll) power(base,exp/2); res = res*res%mod;
-    return (exp%2==0) ? res : (base*res)%mod;
+const int mod = 1e9+7;
+ll power(int base, ll exp, ll mod=1e12) {
+	long long res = 1LL, c = base;
+	while (exp > 0) { // keep squaring c and halving exp 
+		if (1 & exp) res = ((__int128) res * c) % mod;
+		c = ((__int128) c * c)%mod;
+		exp >>= 1;
+	}
+	return res;
 }
 
 int mult(int a, int b) {
@@ -116,6 +120,7 @@ signed main() {
     ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
     //freopen("input.txt","r",stdin);
     //ofstream fout ("output.txt");
+	cout << power(2, 1500000009, 3e9+19) << '\n'; // 3e9+18
     
     //fout.close();
 }

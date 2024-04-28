@@ -10,7 +10,6 @@ long long mulmod(long long a, long long b, long long mod) {
 }
 
 long long power(int base, long long exp, long long mod=1e12) {
-    if (exp == 0) return 1;
 	long long res = 1LL, c = base;
 	while (exp > 0) { // keep squaring c and halving exp 
 		if (1 & exp) {
