@@ -34,8 +34,7 @@ vector<int> shortestReach(int n, vector<vector<int>> edges, int s) {
         auto [d, node] = q.top();
         q.pop();
         if (dist[node] < d) continue; // already considered better path
-        for (pair<int,int> nbpair : adj[node]){ // neighbours which are in q
-            auto [nb, eval] = nbpair;
+        for (auto [nb, eval] : adj[node]){ // neighbours which are in q
             int alt = d + eval;
             if (alt < dist[nb] || dist[nb] == -1) {
                 dist[nb] = alt;
