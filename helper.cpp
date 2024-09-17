@@ -12,23 +12,18 @@ typedef long long ll;
 //#define int ll
 
 // DEBUGGING
-void printVec(int x) {cout << x;}
-void printVec(double x) {cout << x;}
-void printVec(bool x) {cout << (x ? "true" : "false");}
-void printVec(char x) {cout << '\'' << x << '\'';}
-void printVec(string x) {cout << '\"' << x << '\"';}
-template <typename T, typename V>
-void printVec(const pair<T, V> &x) {
-	cout << "{"; printVec(x.first); cout << ","; printVec(x.second); cout << "}";
-}
-template <typename A>
-void printVec(const vector<A> &p) {
-    cout << '[';
-    for (size_t i=0;i<p.size();++i) {printVec(p[i]); if (i<p.size()-1) cout << ", ";}
-	cout << ']';
+template<typename T, typename U>
+std::ostream& operator<<(std::ostream& os, const std::pair<T, U>& p) {
+    return os << "(" << p.first << "," << p.second << ")";
 }
 template<typename T>
-void _print(T t) {printVec(t); cout <<'\n';}
+std::ostream& operator<<(std::ostream& os, const std::vector<T>& x) {
+    os << '[';
+    if(x.empty()) return os << ']';
+    for (size_t i=0; i<x.size(); ++i) os << x[i] << " ";
+	return os << "\b]\n";
+}
+
 
 
 // vector containing digits of int
@@ -66,11 +61,29 @@ int mult(int a, int b, int c, int d) {
     return mult(mult(a,b,c),d);
 }
 int inv(int a) {
-    return power(a, mod-2);
+    return power(a, mod-2, mod);
+}
+
+void calcFactorials(vector<int>& factorial, int mod) {
+	factorial[0] = 1;
+	for (int k = 1; k < (int)factorial.size(); ++k) {
+		factorial[k] = (factorial[k-1]*k) % mod;
+	}
+}
+void calcInvFactorials(vector<int>& factorial,vector<int>& invfactorial, int mod) {
+	for (int i=0; i<(int) invfactorial.size(); ++i) {
+		invfactorial[i] = inv(factorial[i], mod);
+	}
+}
+int binom(int n, int k, vector<int>& facts, vector<int>& invfacts) {
+	if (n==0 && k==0) return 1;
+	if (k > n) return 0;
+	if (k < 0) return 0;
+	return mult(facts[n], invfacts[n-k], invfacts[k]);
 }
 
 // better to precalc factorials and inverse facts
-int binom(int n, int k)  {  
+int binom2(int n, int k)  {  
     int res = 1;  
     if ( k > n - k ) k = n - k;  
     for (int i = 0; i < k; ++i) {  
@@ -79,8 +92,6 @@ int binom(int n, int k)  {
     }  
     return res;  
 }
-
-
 
 // binary search
 // greatest x such that f(x) <= n for monotone f and n
@@ -121,6 +132,10 @@ signed main() {
     //freopen("input.txt","r",stdin);
     //ofstream fout ("output.txt");
 	cout << power(2, 1500000009, 3e9+19) << '\n'; // 3e9+18
-    
+    vector<int> factorial (2e5+1);
+	vector<int> invfactorial (2e5+1);
+	calcFactorials(factorial, mod);
+	calcInvFactorials(factorial,invfactorial, mod);
+
     //fout.close();
 }
