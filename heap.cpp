@@ -29,14 +29,20 @@ void _print(T t) {printVec(t); cout <<'\n';}
 
 
 class MinHeap {
+public:
 	vector<int> arr; // pointer to array of elements in MinHeap
 	int sign;
 	int n; // current number of elments in heap
 	
-	public:
-	
 	MinHeap(bool isMin=true) : n(0) {
 		sign = isMin ? 1 : -1; // maxHeap if isMin==false		
+	}
+	MinHeap(vector<int> a, bool isMin=true) {
+		n = a.size();
+		arr = a;
+		sign = isMin ? 1 : -1;
+		if (sign!=1) for (int i=0; i<n; ++i) arr[i] *= sign;
+		build_heap();
 	}
 
 	bool empty() {
@@ -47,8 +53,8 @@ class MinHeap {
 		// assume that left and right children are already heaps
 		// but node might be larger than either child 
 		// Keep swapping values with smallest child until done
-		int l = 2*node;
-		int r = 2*node+1;
+		int l = 2*node+1;
+		int r = 2*node+2;
 		// identify the smallest among the node and its children
 		int smallest = node;
 		if (l < n && arr[l] < arr[node]) smallest = l;
@@ -75,9 +81,9 @@ class MinHeap {
 		arr.push_back(sign*k);
 		n++;
 		int node = n-1;
-		while (arr[node] < arr[node/2]) {
-			swap(arr[node/2], arr[node]);
-			node = node/2;
+		while (arr[node] < arr[(node-1)/2]) {
+			swap(arr[(node-1)/2], arr[node]);
+			node = (node-1)/2;
 		}
 	}
 
@@ -92,15 +98,15 @@ class MinHeap {
 		heapify(0);
 		return sign*val;
 	}
-
 };
 
 int main() {
     ios_base::sync_with_stdio(0),cin.tie(0),cout.tie(0);
     
-	vector<int> arr = {13,4,12,0,2,-3,1,2,5};
-	MinHeap heap = MinHeap(false);
-	for (int k : arr) heap.insert(k);
+	vector<int> arr = {12,15,4,0,2,-3,1,2,5,6,-4,3,13};
+	MinHeap heap = MinHeap(arr,false);
+	//for (int k : arr) heap.insert(k);
+	_print(heap.arr);
 	while (!heap.empty()) {
 		cout << heap.pop() << '\n';
 	}
