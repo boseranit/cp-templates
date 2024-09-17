@@ -21,6 +21,16 @@ long long power(int base, long long exp, long long mod=1e12) {
 	return res;
 }
 
+vector<ll> allFactors(long long n) {
+	vector<ll> factors;
+	for (int i = 1; i * i <= n; ++i) {
+		if (n%i == 0) factors.push_back(i);
+		ll j = n / i;
+		if (n%j == 0 && j!= i) factors.push_back(j);
+	}
+	return factors;
+}
+
 bool isprime(long long n) {
     if (n == 2 || n==3 || n==5) return true;
     if (n == 1 || n%2==0 || n%3==0 || n%5==0) return false;
